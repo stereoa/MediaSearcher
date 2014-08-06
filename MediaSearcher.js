@@ -8,6 +8,7 @@ function search(query) {
             tbl_row += "<td><img src=\'" + result.Type + ".png\'</td>";
             tbl_row += "<td>" + result.Title + "</td>";
             tbl_row += "<td>" + result.Year + "</td>";
+            tbl_row += "<td><img src=\'add.png\'</td>";
             tbl_body += "<tr>" + tbl_row + "</tr>";
         })
         $("#results-table tbody").html(tbl_body);
