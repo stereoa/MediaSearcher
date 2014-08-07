@@ -1,7 +1,8 @@
 function search(query) {
+    $("#results-table").show();
     //Gets TV + Movies from OMDB
     $.getJSON("http://www.omdbapi.com/?s=" + $("#search-text").val(), function (data) {
-        var tbl_body = "";
+        var tbl_body = "<tr><td>Media Type</td><td>Title</td><td>Year</td><td>Add</td></tr>";
         $.each(data.Search, function (key, result) {
             if ((result.Type != "movie") && (result.Type != "series")) return true;
             var tbl_row = "";
@@ -20,4 +21,5 @@ function addToService(type,id)
 }
 $(document).ready(function () {
     $("#search-button").bind("click", search);
+    $("#results-table").hide();
 });
