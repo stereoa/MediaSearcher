@@ -13,13 +13,14 @@ function search(query) {
 
     //Gets TV + Movies from OMDB
     $.getJSON("http://www.omdbapi.com/?s=" + $("#search-text").val(), function (omdbResults) {
-        parseResults(omdbResults);
+        parseVideo(omdbResults);
     });
+    //TODO:Gets Music
 
-
+    //TODO:Gets Books
 }
 
-function parseResults(omdbResults){
+function parseVideo(omdbResults){
     /*  loop through each result
      build api command
      build row
@@ -33,12 +34,19 @@ function parseResults(omdbResults){
             success: function(itemData) {
                 //determine if its a movie/tv show otherwise return (music will be handled with diff api)
                 if ((itemData.Type != "movie") && (itemData.Type != "series")) return true;
-                var tbl_row = "";
-                var posterURL = itemData.Poster.split("@@")[0] + "@@._V1_SX100.jpg";
-                tbl_row += "<td><img src=\'" + itemData.Type + ".png\'</td>";
-                tbl_row += "<td><img src=\'" + posterURL + "\'</td>";
-                //get poster/plot
-                tbl_row += "<td>" + itemData.Title + "</td>";
+
+                var tbl_row = "<td><img src=\'" + itemData.Type + ".png\'</td>";
+                //get poster
+                if (itemData.Poster!="N/A")
+                {
+                    var posterURL = itemData.Poster.split("@@")[0] + "@@._V1_SX100.jpg";
+                    tbl_row += "<td><img src=\'" + posterURL + "\'</td>";
+                }
+                else tbl_row += "<td>" + itemData.Poster + "</td>";
+
+
+                //plot
+                tbl_row += "<td>" + itemData.Title + "</br>"+itemData.Plot+"</td>";
                 tbl_row += "<td>" + itemData.Year + "</td>";
                 tbl_row += "<td><img src=\'add.png\'</td>";
                 tbl_body += "<tr>" + tbl_row + "</tr>";
@@ -52,5 +60,10 @@ function addToService(type, id) {
 }
 $(document).ready(function () {
     $("#search-button").bind("click", search);
+    $("#search-text").bind('keypress', function(e) {
+        if(e.keyCode==13){
+            search();
+        }
+    });
     $("#results-table").hide();
 });
